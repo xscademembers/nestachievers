@@ -61,19 +61,41 @@ export default async function handler(
         .json({ error: 'Student name, class and phone are required' });
     }
 
+    const normalizedPhone =
+      phone.replace(/\D/g, '').replace(/^91/, '')?.slice(-10) || '';
+    const phoneWithCountry = normalizedPhone.length === 10 ? `+91 ${normalizedPhone}` : String(phone).trim();
+    if (normalizedPhone.length !== 10) {
+      return res
+        .status(400)
+        .json({ error: 'Phone number must be +91 followed by 10 digits.' });
+    }
+
+    const trimmedName = String(studentName).trim();
+    const boardVal = board || '';
+    const examVal = interestedExam || '';
+
     try {
       const connected = await connectMongo();
       if (!connected) {
-        // No Mongo configured in production: accept the submission but do not persist.
         console.warn('POST /api/submissions: MONGO_URI not set, skipping persistence.');
         return res.status(201).json({ success: true, id: null });
       }
-      const doc = await FormSubmission.create({
-        studentName,
+      const existing = await FormSubmission.findOne({
+        studentName: trimmedName,
         currentClass,
-        phone,
-        board: board || '',
-        interestedExam: interestedExam || '',
+        phone: phoneWithCountry,
+        board: boardVal,
+        interestedExam: examVal,
+      });
+      if (existing) {
+        return res.status(409).json({ error: 'Already submitted' });
+      }
+      const doc = await FormSubmission.create({
+        studentName: trimmedName,
+        currentClass,
+        phone: phoneWithCountry,
+        board: boardVal,
+        interestedExam: examVal,
         message: message || '',
       });
       return res.status(201).json({ success: true, id: doc._id });

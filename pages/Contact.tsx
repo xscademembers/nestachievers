@@ -6,9 +6,10 @@ import { Mail, Phone, MapPin, Send, Facebook, Instagram, Youtube } from 'lucide-
 const Contact: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [duplicateMessage, setDuplicateMessage] = useState(false);
   const [currentClass, setCurrentClass] = useState<string>('');
   const [studentName, setStudentName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState('+91 ');
   const [board, setBoard] = useState('');
   const [interestedExam, setInterestedExam] = useState('');
   const [message, setMessage] = useState('');
@@ -17,17 +18,56 @@ const Contact: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const normalizePhone = (raw: string): string => {
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length <= 10) return '+91 ' + digits;
+    if (digits.startsWith('91') && digits.length === 12) return '+91 ' + digits.slice(2);
+    return '+91 ' + digits.slice(-10);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    if (v === '' || v === '+91') {
+      setPhone('+91 ');
+      return;
+    }
+    if (!v.startsWith('+91')) {
+      setPhone('+91 ' + v.replace(/\D/g, '').slice(0, 10));
+      return;
+    }
+    const after = v.slice(3).replace(/\D/g, '').slice(0, 10);
+    setPhone('+91 ' + after);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
+    setDuplicateMessage(false);
+    const trimmedName = studentName.trim();
+    const trimmedPhone = normalizePhone(phone).trim();
+    const phoneDigits = trimmedPhone.replace(/\D/g, '');
+    if (!trimmedPhone.startsWith('+91') || phoneDigits.length !== 12) {
+      setSubmitError('Phone number must be +91 followed by 10 digits.');
+      return;
+    }
     const payload = {
-      studentName: studentName.trim(),
+      studentName: trimmedName,
       currentClass,
-      phone: phone.trim(),
+      phone: trimmedPhone,
       board: (currentClass === '8th' || currentClass === '9th' || currentClass === '10th') ? board : '',
       interestedExam: (currentClass === '11th' || currentClass === '12th' || currentClass === 'repeat') ? interestedExam : '',
       message: message.trim(),
     };
+    const needsBoard = currentClass === '8th' || currentClass === '9th' || currentClass === '10th';
+    const needsExam = currentClass === '11th' || currentClass === '12th' || currentClass === 'repeat';
+    if (needsBoard && !board) {
+      setSubmitError('Please select a board.');
+      return;
+    }
+    if (needsExam && !interestedExam) {
+      setSubmitError('Please select an interested exam.');
+      return;
+    }
     try {
       const res = await fetch('/api/submissions', {
         method: 'POST',
@@ -35,6 +75,11 @@ const Contact: React.FC = () => {
         body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
+      if (res.status === 409 || (data.error && /already submitted/i.test(data.error))) {
+        setDuplicateMessage(true);
+        setSubmitError(null);
+        return;
+      }
       if (!res.ok) {
         setSubmitError(data.error || 'Failed to submit. Please try again.');
         return;
@@ -42,10 +87,11 @@ const Contact: React.FC = () => {
       setSubmitted(true);
       setStudentName('');
       setCurrentClass('');
-      setPhone('');
+      setPhone('+91 ');
       setBoard('');
       setInterestedExam('');
       setMessage('');
+      setDuplicateMessage(false);
       setTimeout(() => setSubmitted(false), 5000);
     } catch {
       setSubmitError('Network error. Please try again.');
@@ -168,6 +214,7 @@ const Contact: React.FC = () => {
                     <select 
                       value={currentClass}
                       onChange={(e) => setCurrentClass(e.target.value)}
+                      required
                       className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700"
                     >
                       <option value="">Select Class</option>
@@ -183,21 +230,23 @@ const Contact: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Phone Number</label>
+                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Phone Number <span className="text-primary">+91 required</span></label>
                     <input 
                       type="tel" 
                       required
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+91"
+                      onChange={handlePhoneChange}
+                      placeholder="+91 9876543210"
                       className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-medium"
+                      aria-describedby="phone-hint"
                     />
+                    <p id="phone-hint" className="sr-only">Enter 10 digits after +91</p>
                   </div>
                   {/* Board Selection - Show for classes 8th, 9th, 10th */}
                   {(currentClass === '8th' || currentClass === '9th' || currentClass === '10th') && (
                     <div>
                       <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Board</label>
-                      <select value={board} onChange={(e) => setBoard(e.target.value)} className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
+                      <select value={board} onChange={(e) => setBoard(e.target.value)} required className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
                         <option value="">Select Board</option>
                         <option value="ICSE">ICSE</option>
                         <option value="CBSE">CBSE</option>
@@ -209,7 +258,7 @@ const Contact: React.FC = () => {
                   {(currentClass === '11th' || currentClass === '12th') && (
                     <div>
                       <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Interested Exam</label>
-                      <select value={interestedExam} onChange={(e) => setInterestedExam(e.target.value)} className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
+                      <select value={interestedExam} onChange={(e) => setInterestedExam(e.target.value)} required className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
                         <option value="">Select Exam</option>
                         <option value="IIT-JEE Mains and Advance">IIT-JEE Mains and Advance</option>
                         <option value="NEET">NEET</option>
@@ -224,7 +273,7 @@ const Contact: React.FC = () => {
                   {currentClass === 'repeat' && (
                     <div>
                       <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Interested Exam</label>
-                      <select value={interestedExam} onChange={(e) => setInterestedExam(e.target.value)} className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
+                      <select value={interestedExam} onChange={(e) => setInterestedExam(e.target.value)} required className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none font-bold text-gray-700">
                         <option value="">Select Exam</option>
                         <option value="IIT-JEE Mains and Advance">IIT-JEE Mains and Advance</option>
                         <option value="NEET">NEET</option>
@@ -238,7 +287,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Your Message / Specific Query</label>
+                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Your Message / Specific Query <span className="text-gray-400 font-normal">(optional)</span></label>
                   <textarea 
                     rows={4}
                     value={message}
@@ -248,6 +297,9 @@ const Contact: React.FC = () => {
                   />
                 </div>
 
+                {duplicateMessage && (
+                  <p className="text-amber-700 bg-amber-50 px-4 py-3 rounded-2xl text-sm font-medium border border-amber-200" role="alert">Already submitted. This inquiry was submitted earlier with the same details.</p>
+                )}
                 {submitError && (
                   <p className="text-red-600 text-sm font-medium" role="alert">{submitError}</p>
                 )}

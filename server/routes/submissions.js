@@ -32,6 +32,11 @@ function useMongo() {
   return mongoose.connection.readyState === 1;
 }
 
+function normalizePhone(phone) {
+  const digits = String(phone).replace(/\D/g, '').replace(/^91/, '').slice(-10);
+  return digits.length === 10 ? `+91 ${digits}` : null;
+}
+
 // Public: save contact form submission
 router.post('/', async (req, res) => {
   try {
@@ -39,17 +44,45 @@ router.post('/', async (req, res) => {
     if (!studentName || !currentClass || !phone) {
       return res.status(400).json({ error: 'Student name, class and phone are required' });
     }
+    const phoneNormalized = normalizePhone(phone);
+    if (!phoneNormalized) {
+      return res.status(400).json({ error: 'Phone number must be +91 followed by 10 digits.' });
+    }
+    const trimmedName = String(studentName).trim();
+    const boardVal = board || '';
+    const examVal = interestedExam || '';
     const data = {
-      studentName,
+      studentName: trimmedName,
       currentClass,
-      phone,
-      board: board || '',
-      interestedExam: interestedExam || '',
+      phone: phoneNormalized,
+      board: boardVal,
+      interestedExam: examVal,
       message: message || '',
     };
     if (useMongo()) {
+      const existing = await FormSubmission.findOne({
+        studentName: trimmedName,
+        currentClass,
+        phone: phoneNormalized,
+        board: boardVal,
+        interestedExam: examVal,
+      });
+      if (existing) {
+        return res.status(409).json({ error: 'Already submitted' });
+      }
       const doc = await FormSubmission.create(data);
       return res.status(201).json({ success: true, id: doc._id });
+    }
+    const isDuplicate = inMemorySubmissions.some(
+      (s) =>
+        s.studentName === trimmedName &&
+        s.currentClass === currentClass &&
+        s.phone === phoneNormalized &&
+        (s.board || '') === boardVal &&
+        (s.interestedExam || '') === examVal
+    );
+    if (isDuplicate) {
+      return res.status(409).json({ error: 'Already submitted' });
     }
     const id = Date.now().toString();
     inMemorySubmissions.unshift({
