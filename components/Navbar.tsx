@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
       // Detect which section is currently in view
       if (location.pathname === '/') {
         const sections = ['home', 'about', 'gallery', 'testimonials', 'location'];
-        const scrollPosition = window.scrollY + 200; // Offset for navbar height
+        const scrollPosition = window.scrollY + 160; // Offset for navbar height
         
         for (let i = sections.length - 1; i >= 0; i--) {
           const section = document.getElementById(sections[i]);
@@ -61,14 +61,14 @@ const Navbar: React.FC = () => {
     setIsOpen(false);
   };
 
-  const logoUrl = "https://storage.googleapis.com/new_client_files/nest%20acheivers/nest%20Logo%20file%20(1).png";
+  const logoUrl = "https://storage.googleapis.com/new_client_files/nest%20acheivers/nest%20Logo%20filenew.png";
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass shadow-lg py-1' : 'bg-white/80 backdrop-blur-sm py-4'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass shadow-lg py-1' : 'bg-white/80 backdrop-blur-sm py-2'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
         <div className="flex justify-between items-center">
-          <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center max-w-[120px] sm:max-w-none">
-            <img src={logoUrl} alt="Nest Achievers Logo" className="h-12 sm:h-16 md:h-24 w-auto object-contain transition-all" />
+          <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center max-w-[140px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-none">
+            <img src={logoUrl} alt="Nest Achievers Logo" className="h-10 sm:h-11 md:h-12 lg:h-14 w-auto object-contain transition-all" />
           </Link>
 
           {/* Desktop Menu */}

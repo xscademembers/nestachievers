@@ -11,8 +11,8 @@ const Stats: React.FC = () => {
   ];
 
   return (
-    <div className="py-16 bg-primary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-10 md:py-12 bg-primary">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <motion.div

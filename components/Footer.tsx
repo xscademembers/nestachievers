@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
 
 const Footer: React.FC = () => {
-  const logoUrl = "https://storage.googleapis.com/new_client_files/nest%20acheivers/nest%20Logo%20file%20(1).png";
+  const logoUrl = "https://storage.googleapis.com/new_client_files/nest%20acheivers/nest%20Logo%20filenew.png";
 
   return (
     <footer className="bg-white border-t border-gray-100 pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="space-y-6">
-            <img src={logoUrl} alt="Nest Achievers Nagpur" className="h-28 md:h-36 w-auto object-contain" />
+            <img src={logoUrl} alt="Nest Achievers Nagpur" className="h-20 md:h-24 w-auto object-contain" />
             <p className="text-gray-500 leading-relaxed font-medium text-sm sm:text-base break-words">
               Academic Coaching Nagpur - Nurturing students from Class 8th to 12th for IIT-JEE, NEET, and Board success.
             </p>

@@ -105,12 +105,12 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12 md:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-4 sm:py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-12"
         >
           <div className="inline-block bg-primary/10 text-primary px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest mb-4">
             Nagpur Location

@@ -16,9 +16,9 @@ const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <div className="py-12 sm:py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <div className="py-8 sm:py-10 md:py-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
+        <div className="text-center mb-10 md:mb-12">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

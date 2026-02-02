@@ -188,7 +188,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 pt-5 pb-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 pt-5 pb-8 px-4 sm:px-6 lg:px-[50px]">
       <div className="max-w-6xl mx-auto">
         <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-8 p-4 bg-white rounded-2xl border-2 border-gray-200 shadow-sm">
           <div className="flex items-center gap-3">

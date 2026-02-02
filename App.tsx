@@ -12,7 +12,7 @@ const App: React.FC = () => {
     <HashRouter>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow pt-24 md:pt-28" id="main-content">
+        <main className="flex-grow pt-16 md:pt-20" id="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />

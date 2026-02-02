@@ -6,28 +6,28 @@ import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
   return (
-    <div className="relative min-h-[95vh] flex items-center bg-white overflow-hidden pt-10">
+    <div className="relative min-h-[calc(100vh-5rem)] flex items-center bg-white overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl opacity-60" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-60" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 py-8 sm:py-12 md:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px] w-full z-10 py-4 sm:py-6 md:py-8 flex-1 min-h-0 flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center w-full">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center space-x-2 bg-primary/10 text-primary px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-6 flex-wrap">
+            <div className="inline-flex items-center space-x-2 bg-primary/10 text-primary px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-3 sm:mb-4 flex-wrap">
               <Sparkles size={14} className="sm:w-4 sm:h-4" />
               <span className="break-words">Admissions Opening for 2026-27</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-4 break-words">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-tight mb-3 sm:mb-4 break-words">
               Academic Coaching <span className="text-primary italic">Nagpur</span>
             </h1>
 
-            <div className="space-y-4 mb-8">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6 md:mb-8">
               <div className="bg-primary/5 border-l-4 border-primary p-3 sm:p-4 rounded-r-xl">
                 <p className="text-lg sm:text-xl md:text-2xl font-black text-gray-900 break-words">🎓 Classes 8th to 12th</p>
               </div>
@@ -41,11 +41,11 @@ const Hero: React.FC = () => {
               </div>
             </div>
             
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 max-w-lg leading-relaxed break-words">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-4 sm:mb-6 md:mb-8 max-w-lg leading-relaxed break-words">
               Nest Achievers provides specialized coaching for high school students to crack competitive exams and excel in board examinations with personalized mentorship.
             </p>
 
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-10">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-0">
               <Link 
                 to="/contact" 
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

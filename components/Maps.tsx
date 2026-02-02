@@ -6,14 +6,14 @@ const Maps: React.FC = () => {
   const mapUrl = "https://maps.app.goo.gl/jaoXb6LxjupYcN7M8";
 
   return (
-    <section id="location" className="py-12 sm:py-16 md:py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="location" className="py-8 sm:py-10 md:py-14 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-[50px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-10"
         >
           <div className="inline-block bg-primary/10 text-primary px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest mb-4">
             Visit Us
