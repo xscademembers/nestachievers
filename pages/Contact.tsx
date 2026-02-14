@@ -195,7 +195,7 @@ const Contact: React.FC = () => {
             className="lg:col-span-3"
           >
             <div className="bg-white p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-[2.5rem] shadow-2xl border border-gray-50 h-full">
-              <h3 className="text-2xl font-black mb-8 text-gray-900">Course Inquiry Form</h3>
+              <h3 className="text-2xl font-black mb-8 text-gray-900">Admission Form</h3>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -298,7 +298,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 {duplicateMessage && (
-                  <p className="text-amber-700 bg-amber-50 px-4 py-3 rounded-2xl text-sm font-medium border border-amber-200" role="alert">Already submitted. This inquiry was submitted earlier with the same details.</p>
+                  <p className="text-amber-700 bg-amber-50 px-4 py-3 rounded-2xl text-sm font-medium border border-amber-200" role="alert">Already submitted. This admission form was submitted earlier with the same details.</p>
                 )}
                 {submitError && (
                   <p className="text-red-600 text-sm font-medium" role="alert">{submitError}</p>
@@ -309,10 +309,10 @@ const Contact: React.FC = () => {
                   className={`w-full py-5 rounded-2xl font-black text-lg flex items-center justify-center space-x-2 transition-all shadow-xl ${submitted ? 'bg-green-500 text-white' : 'bg-primary text-white hover:bg-opacity-90 hover:-translate-y-1'}`}
                 >
                   {submitted ? (
-                    <span className="text-sm sm:text-base">Inquiry Sent! We will call you back.</span>
+                    <span className="text-sm sm:text-base">Admission form sent! We will call you back.</span>
                   ) : (
                     <>
-                      <span className="text-sm sm:text-base">Submit Admission Inquiry</span>
+                      <span className="text-sm sm:text-base">Submit Admission Form</span>
                       <Send size={20} />
                     </>
                   )}
